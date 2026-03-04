@@ -1,7 +1,8 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 
 "use client"
 import { Spinner } from "@/components/ui/spinner";
-import { ICategory, ISessionCreate } from "@/Interfaces/data.interface";
+import { ICategoryGeneral, ISessionCreate } from "@/Interfaces/data.interface";
 import { UserSession } from "@/Utils/clientSideSession";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
@@ -11,14 +12,15 @@ const SessionCreateForm = () => {
   const [sesionFee, setSessionFee] = useState("");
   const [tutorData, setTutorData] = useState(null);
   const { user, isPending } = UserSession()
+ 
   const [loading, setLoadin] = useState(false)
-  const [categories, setCategories] = useState<ICategory[]>([]);
+  const [categories, setCategories] = useState<ICategoryGeneral[]>([]);
 
   useEffect(() => {
     async function fetchCategorie() {
-      const response = await fetch(`${process.env.NEXT_PUBLIC_BACKKEND_URL}/api/v1/categories/all-categories`);
+      const response = await fetch(`${process.env.NEXT_PUBLIC_BACKKEND_URL}/api/v1/categories/category/all-category/general`,{credentials: 'include'});
       const data = await response.json();
-
+      console.log(data)
       if (data.success) {
         setCategories(data.data)
       } else {
@@ -61,7 +63,9 @@ const SessionCreateForm = () => {
     
     setLoadin(true)
     data.sessionFee = parseFloat(sesionFee);
+    
     data.tutorId = user.id;
+
     if (!data.categoryId) {
       return toast.error("Please select a category!");
     } else if (!data.sessionFee) {

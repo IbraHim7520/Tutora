@@ -20,3 +20,17 @@ export interface ISignupTutorForm {
     contact?:string,
     address?:string
 }
+
+export interface ISessionUpateFormData {
+    title?:string,
+    categoryId?:string,
+    date?:string,
+    fromTime?:string,
+    toTime?:string,
+}
+
+
+export interface ICategoryCreateForm {
+    title:string,
+    description:string
+}

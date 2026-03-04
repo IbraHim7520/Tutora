@@ -87,7 +87,10 @@ const DashboardLayout = ({ admin, student, teacher, role }: DashboardLayoutProps
             {
                 user?.role === "ADMIN" ?
                 adminRoutes.map((admRoute, idx)=> <div key={idx}>
-
+                    <Link href={admRoute.path} key={idx} className="w-full flex items-center gap-3 px-4 py-3 text-sm font-medium rounded-xl hover:bg-white/5 hover:text-white transition-all">
+                       {admRoute.icon}
+                  {admRoute.title}
+                      </Link>
                 </div> )
                 :
                 user?.role === "TEACHER" ? teacherRoutes.map((techRoute, idx)=> <div key={idx} >
