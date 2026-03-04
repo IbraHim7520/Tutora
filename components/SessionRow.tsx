@@ -54,23 +54,40 @@ const SessionRow = ({
       </td>
 
       {/* 4. Status Toggle */}
+      {/* 4. Status Toggle */}
       <td className="px-6 py-4 text-center">
         <div className="flex items-center justify-center gap-2">
-          <span className={`text-[10px] font-bold uppercase ${session.status === 'Approved' as string ? 'text-green-600' : 'text-gray-400'}`}>
-            {session.status === 'Approved' as string? 'Active' : 'Off'}
-          </span>
-          <button
-            onClick={() => handleStatusToggle(session.id, session.status)}
-            className={`relative inline-flex h-5 w-10 items-center rounded-full transition-colors focus:outline-none ${
-              session.status === "Approved" as string ? "bg-green-500" : "bg-gray-300"
-            }`}
-          >
-            <span
-              className={`inline-block h-3 w-3 transform rounded-full bg-white transition-transform ${
-                session.status === "Approved" as string ? "translate-x-6" : "translate-x-1"
-              }`}
-            />
-          </button>
+          {/** Correct Status Check */}
+          {(() => {
+            const isApproved = session.status === "APPROVED";
+
+            return (
+              <>
+                <span
+                  className={`text-[10px] font-bold uppercase ${
+                    isApproved ? "text-green-600" : "text-gray-400"
+                  }`}
+                >
+                  {isApproved ? "Approved" : "Discontinue"}
+                </span>
+
+                <button
+                  onClick={() =>
+                    handleStatusToggle(session.id, session.status)
+                  }
+                  className={`relative inline-flex h-5 w-10 items-center rounded-full transition-colors ${
+                    isApproved ? "bg-green-500" : "bg-gray-300"
+                  }`}
+                >
+                  <span
+                    className={`inline-block h-3 w-3 transform rounded-full bg-white transition-transform ${
+                      isApproved ? "translate-x-5" : "translate-x-1"
+                    }`}
+                  />
+                </button>
+              </>
+            );
+          })()}
         </div>
       </td>
 

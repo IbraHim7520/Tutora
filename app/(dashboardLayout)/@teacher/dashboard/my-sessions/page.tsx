@@ -120,11 +120,10 @@ const MySessionPage = () => {
   const handleStatusToggle = async (id: string, currentStatus: string) => {
     const newStatus = currentStatus === "APPROVED" ? "DISCONTINUE" : "APPROVED";
     try {
-      const response = await fetch(`${process.env.NEXT_PUBLIC_BACKKEND_URL}/api/v1/tutoring-sessions/status-update/${id}`, {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_BACKKEND_URL}/api/v1/tutoring-sessions/session/toggle/${id}`, {
         method: "PATCH",
         headers: { "Content-Type": "application/json" },
         credentials: "include",
-        body: JSON.stringify({ status: newStatus }),
       });
       const result = await response.json();
       if (result.success) {
@@ -132,6 +131,7 @@ const MySessionPage = () => {
           prev.map((s) => (s.id === id ? { ...s, status: newStatus } : s))
         );
         toast.success(`Session ${newStatus}`);
+        console.log(result)
       }
     } catch {
       toast.error("Failed to update status");
@@ -162,6 +162,9 @@ const MySessionPage = () => {
       toast.error("Something went wrong");
     }
   };
+
+
+  
 
   return (
     <div className="container mx-auto py-10 px-4">
@@ -256,6 +259,7 @@ const MySessionPage = () => {
                   session={session}
                   handleSessionDelete={handleSessionDelete}
                   handlSessionSchedule={() => handleSessionReschedule(session)}
+                  handleStatusToggle={handleStatusToggle}
                 />
               ))
             )}
