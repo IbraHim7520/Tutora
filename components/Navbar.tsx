@@ -101,9 +101,9 @@ const Navbar = () => {
                    <div className="px-3 py-2 border-b border-slate-50 mb-1">
                     <p className="text-xs font-bold text-slate-900 truncate">{user.name}</p>
                   </div>
-                  <button className="w-full flex items-center gap-2 px-3 py-2 text-sm text-slate-600 hover:bg-slate-50 rounded-lg">
+                  <Link href={"/dashboard"} className="w-full flex items-center gap-2 px-3 py-2 text-sm text-slate-600 hover:bg-slate-50 rounded-lg">
                     <User className="size-4" /> Profile
-                  </button>
+                  </Link>
                   <button onClick={()=>handleUserLogout()} className="w-full flex items-center gap-2 px-3 py-2 text-sm text-red-600 hover:bg-red-50 rounded-lg">
                     {logoutLoading ? <Spinner className="size-4"></Spinner> : <div className="flex justify-center items-center"><LogOut className="size-4" /> Logout</div>}
                   </button>

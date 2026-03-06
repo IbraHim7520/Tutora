@@ -41,7 +41,7 @@ const MySessionPage = () => {
     const fetchCategories = async () => {
       try {
         const response = await fetch(
-          `${process.env.NEXT_PUBLIC_BACKKEND_URL}/api/v1/categories/category/all-category/general`
+          `${process.env.NEXT_PUBLIC_BACKKEND_URL}/api/v1/categories/category/all-category/general`, {credentials: 'include'}
         );
         const data = await response.json();
         setCategories(data.success ? data.data : []);
@@ -51,7 +51,7 @@ const MySessionPage = () => {
     };
     fetchCategories();
   }, []);
-
+  console.log(categories)
   /* ---------------- FETCH SESSIONS ---------------- */
   useEffect(() => {
     const fetchSessionData = async () => {
@@ -79,16 +79,31 @@ const MySessionPage = () => {
   }, []);
 
   /* ---------------- HANDLERS ---------------- */
-  const handleSessionReschedule = (session: ISessionData) => {
-    setSessionId(session.id);
-    // Pre-fill form
-    setValue("title", session.title);
-    setValue("categoryId", session.categoryId);
-    setValue("date", session.date);
-    setValue("fromTime", session.fromTime);
-    setValue("toTime", session.toTime);
-    setIsUpdateOpen(true);
-  };
+ const handleSessionReschedule = (session: ISessionData) => {
+  setSessionId(session.id);
+
+  // Format date properly (yyyy-mm-dd)
+  const formattedDate = new Date(session.date)
+    .toISOString()
+    .split("T")[0];
+
+  // Format time properly (HH:mm)
+  const formattedFromTime = new Date(session.fromTime)
+    .toISOString()
+    .slice(11, 16);
+
+  const formattedToTime = new Date(session.toTime)
+    .toISOString()
+    .slice(11, 16);
+
+  setValue("title", session.title);
+  setValue("categoryId", session.categoryId);
+  setValue("date", formattedDate);
+  setValue("fromTime", formattedFromTime);
+  setValue("toTime", formattedToTime);
+
+  setIsUpdateOpen(true);
+};
 
   const handleSessionDelete = (id: string) => {
     Swal.fire({
@@ -139,30 +154,57 @@ const MySessionPage = () => {
   };
 
   /* ---------------- UPDATE FORM ---------------- */
-  const onSubmit = async (formData: ISessionUpateFormData) => {
-    if (!sessionId) return;
-    try {
-      const response = await fetch(`${process.env.NEXT_PUBLIC_BACKKEND_URL}/api/v1/tutoring-sessions/session-update/${sessionId}`, {
+const onSubmit = async (formData: ISessionUpateFormData) => {
+  if (!sessionId) return;
+
+  try {
+    const response = await fetch(
+      `${process.env.NEXT_PUBLIC_BACKKEND_URL}/api/v1/tutoring-sessions/session-update/${sessionId}`,
+      {
         method: "PATCH",
         credentials: "include",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(formData),
-      });
-      const result = await response.json();
-      if (result.success) {
-        toast.success("Session updated successfully");
-        // State Update: Update the local list so UI reflects changes immediately
-        setSessionData((prev) =>
-          prev.map((s) => (s.id === sessionId ? { ...s, ...formData } : s))
-        );
-        setIsUpdateOpen(false);
-        reset();
       }
-    } catch {
-      toast.error("Something went wrong");
-    }
-  };
+    );
 
+    const result = await response.json();
+    console.log(result)
+    if (!result.success) {
+      toast.error("Update failed");
+      return;
+    }
+
+    toast.success("Session updated successfully");
+
+    // 🔥 Optimistic Local Update
+    setSessionData((prev) =>
+      prev.map((session) => {
+        if (session.id !== sessionId) return session;
+
+        // Find updated category object
+        const updatedCategory = categories.find(
+          (c) => c.id === formData.categoryId
+        );
+
+        return {
+          ...session,
+          ...formData,
+          category: updatedCategory
+            ? { ...updatedCategory }
+            : session.category,
+        };
+      })
+    );
+
+    setIsUpdateOpen(false);
+    reset();
+    setSessionId(null);
+  } catch (error) {
+    console.error(error);
+    toast.error("Something went wrong");
+  }
+};
 
   
 
@@ -246,7 +288,7 @@ const MySessionPage = () => {
           <tbody>
             {sessionLoading ? (
               <tr>
-                <td colSpan={5} className="py-20 text-center"><Spinner /></td>
+                <td colSpan={5} className="py-20 text-center mx-auto w-full h-full"><Spinner /></td>
               </tr>
             ) : sessionData.length === 0 ? (
               <tr>

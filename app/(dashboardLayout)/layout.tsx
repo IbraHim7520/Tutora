@@ -27,7 +27,6 @@ interface DashboardLayoutProps {
   admin: React.ReactNode;
   student: React.ReactNode;
   teacher: React.ReactNode;
-  role: "admin" | "student" | "teacher";
 }
 
 
@@ -51,7 +50,7 @@ const studentRoutes = [
     {title: "My Reviews" , path: "/dashboard/reviews", icon:<UserStar size={20}/>},
 ]
 
-const DashboardLayout = ({ admin, student, teacher, role }: DashboardLayoutProps) => {
+const DashboardLayout = ({ admin, student, teacher }: DashboardLayoutProps) => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
     const {user , isPending} = UserSession();
    
@@ -76,7 +75,7 @@ const DashboardLayout = ({ admin, student, teacher, role }: DashboardLayoutProps
             </div>
             <div className="flex flex-col">
               <span className="text-xl font-bold text-white tracking-tight leading-none">Tutora</span>
-              <span className="text-[10px] text-indigo-400 font-bold uppercase tracking-widest mt-1">{role}</span>
+              <span className="text-[10px] text-indigo-400 font-bold uppercase tracking-widest mt-1">{user?.role}</span>
             </div>
           </div>
 
