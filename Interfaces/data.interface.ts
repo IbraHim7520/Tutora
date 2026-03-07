@@ -64,3 +64,41 @@ export interface ICategoryData {
     createdAt:string,
     updatedAt:string
 }
+
+
+export interface IUser {
+  email: string;
+  name: string;
+  image: string;
+}
+
+export interface ITutor {
+  degree: string;
+  designation: string;
+  experience: string;
+  isBanned: boolean;
+  user: IUser;
+}
+
+export interface ICategory {
+  id: string;
+  title: string;
+  description: string;
+}
+
+export interface ISessionFetchedData {
+  id: string;
+  title: string;
+  description: string;
+  sessionFee: number;
+  status: "APPROVED" | "PENDING" | "REJECTED"; // Added common status types
+  date: string; // ISO Date String
+  fromTime: string; // ISO Date String
+  toTime: string; // ISO Date String
+  categoryId: string;
+  category: ICategory;
+  tutorId: string;
+  tutor: ITutor;
+  createdAt: string;
+  updatedAt: string;
+}
