@@ -33,6 +33,15 @@ const LoginForm = () => {
         toast.success("Sign in successfull.")
         router.push('/');
     }
+    const handleGoogleLogin = async()=>{
+      const data =   await authClient.signIn.social({
+            provider: "google",
+            callbackURL: process.env.NODE_ENV === "production" ? "https://mentorix-pi.vercel.app" : "http://localhost:3000"
+        })
+
+        console.log(data)
+    }
+
     return (
         <form  className="space-y-5" onSubmit={handleSubmit(onSubmit)}>
             
@@ -94,6 +103,7 @@ const LoginForm = () => {
             {/* Quick Social Button */}
             <button 
                 type="button"
+                onClick={handleGoogleLogin}
                 className="w-full flex items-center justify-center gap-2 bg-white border border-slate-200 py-3 rounded-xl text-sm font-medium text-slate-700 hover:bg-slate-50 transition-colors"
             >
                 <svg className="w-5 h-5" viewBox="0 0 24 24">

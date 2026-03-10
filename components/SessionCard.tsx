@@ -1,5 +1,5 @@
 "use client"
-import { Calendar, Clock, Timer, Users, Star, ArrowRight } from "lucide-react";
+import { Calendar, Clock, Timer, Users, Star } from "lucide-react";
 import { ISessionFetchedData } from "@/Interfaces/data.interface";
 import { UserSession } from "@/Utils/clientSideSession";
 import Swal from "sweetalert2";
