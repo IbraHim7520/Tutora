@@ -11,7 +11,8 @@ const DashboardPage = async () => {
       headers: {
         cookie: cookieStore.toString()
       },
-      cache: "no-store"
+      cache: "no-store",
+      credentials: 'include'
     }
   );
 

@@ -6,7 +6,7 @@ const page = async() => {
     const userProfileResponse = await fetch(`${process.env.NEXT_PUBLIC_BACKKEND_URL}/api/v1/users/profile`,{
         headers:{
             cookie: cookiesData.toString()
-        },cache: 'no-store'
+        },cache: 'no-store', credentials: "include"
     })
 
     const userProfileData = await userProfileResponse.json();

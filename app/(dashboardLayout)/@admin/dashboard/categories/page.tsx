@@ -20,7 +20,7 @@ const CategoryManagementPage = () => {
     
     useEffect(()=>{
     const fetchCategory = async()=>{
-        const response = await fetch(`${process.env.NEXT_PUBLIC_BACKKEND_URL}/api/v1/categories/all-categories`);
+        const response = await fetch(`${process.env.NEXT_PUBLIC_BACKKEND_URL}/api/v1/categories/all-categories`, {credentials: "include"});
 
         const cateData = await response.json();
         const {data} = cateData;

@@ -16,7 +16,8 @@ const TutorPage = () => {
         setIsLoading(true);
         const response = await fetch(
           `${process.env.NEXT_PUBLIC_BACKKEND_URL}/api/v1/tutors/tutor/all-tutors`,
-          { cache: "no-store" }
+          { cache: "no-store" , credentials: "include" },
+          
         );
 
         const text = await response.text();
